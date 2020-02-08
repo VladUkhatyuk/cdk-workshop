@@ -14,12 +14,12 @@ export class CdkWorkshopStack extends cdk.Stack {
       handler: "hello.handler" // file is "hello", function is "handler"
     });
 
-    const helloWorldHitCounter = new HitCounter(this, "HelloHitCounter", {
+    const helloWithCounter = new HitCounter(this, "HelloHitCounter", {
       downstream: hello
     });
 
     new apigw.LambdaRestApi(this, "Endpoint", {
-      handler: hello
+      handler: helloWithCounter.handler
     });
   }
 }
