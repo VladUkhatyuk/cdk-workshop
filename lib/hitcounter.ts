@@ -20,13 +20,18 @@ export class HitCounter extends cdk.Construct {
     });
 
     this.handler = new lambda.Function(this, 'HitCounterHandler', {
-        runtime: lambda.Runtime.NODEJS_8_10,
-        handler: 'hitcounter.handler',
+        runtime: lambda.Runtime.PYTHON_3_7,
+        handler: 'hitcount.handler',
         code: lambda.Code.asset('lambda'),
         environment: {
             DOWNSTREAM_FUNCTION_NAME: props.downstream.functionName,
             HITS_TABLE_NAME: table.tableName
         }
     });
+    // grant the lambda role read/write permissions to our table
+    table.grantReadWriteData(this.handler);
+    
+    props.downstream.grantInvoke(this.handler);
+
   }
 }
